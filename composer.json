@@ -1,0 +1,34 @@
+{
+    "name": "codenom/xendit",
+    "description": "Xendit Payment for laravel 8.",
+    "type": "laravel-payment",
+    "require": {
+        "xendit/xendit-php": "^2.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8.0"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ilham Falachul Adha",
+            "email": "codenomdev@gmail.com",
+            "homepage": "https://codenom.com/",
+            "role": "Developer"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "autoload": {
+        "psr-4": {
+            "Codenom\\Xendit\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Codenom\\Xendit\\Provider\\XenditServiceProvider"
+            ]
+        }
+    }
+}
