@@ -27,7 +27,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Codenom\\Xendit\\Provider\\XenditServiceProvider"
+                "Codenom\\Xendit\\Providers\\XenditServiceProvider"
             ]
         }
     }
