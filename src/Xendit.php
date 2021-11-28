@@ -2,8 +2,14 @@
 
 namespace Codenom\Xendit;
 
+// use Exception;
+
+use Exception;
+use Xendit\Exceptions\ApiException;
 use Xendit\Xendit as BaseXendit;
 use Xendit\Balance;
+use Xendit\VirtualAccounts;
+use Xendit\PaymentChannels;
 
 class Xendit
 {
@@ -38,15 +44,77 @@ class Xendit
      *
      * @param string $account_type account type (CASH|HOLDING|TAX)
      * @param array $param = []
-     * @return Xendit::getBalance
+     * @return \Xendit::getBalance
      * @throws \Xendit\Exceptions\ApiException
      */
-    public function getBalance(string $account_type = null, array $param = [])
+    public function getBalance(string $account_type = 'CASH', array $param = [])
     {
         try {
             $this->getSecretKey();
             return Balance::getBalance($account_type, $param);
-        } catch (\Exception $e) {
+        } catch (ApiException $e) {
+            $e->getMessage();
+        }
+    }
+
+    /**
+     * Get available VA banks
+     *
+     * @return \Xendit\VirtualAccounts
+     * @throws \Exceptions\ApiException
+     */
+    public function getVABanks()
+    {
+        try {
+            $this->getSecretKey();
+            return VirtualAccounts::getVABanks();
+        } catch (ApiException $e) {
+            $e->getMessage();
+        }
+    }
+
+    /**
+     * Get FVA payment.
+     *
+     * @param string $payment_id payment ID
+     *
+     * @return \Xendit\VirtualAccounts::getFVAPayment
+     * @throws Exceptions\ApiException
+     */
+    public function getFVAPayment(array $params = [])
+    {
+        if (\array_key_exists('external_id', $params) === false) {
+            throw new Exception(
+                \sprintf('external_id must be a required')
+            );
+        }
+        if (\array_key_exists('bank_code', $params) === false) {
+            throw new Exception(
+                \sprintf('bank_code must be a required')
+            );
+        }
+        if (\array_key_exists('name', $params) === false) {
+            throw new Exception(
+                \sprintf('name must be a required')
+            );
+        }
+        $this->getSecretKey();
+        return VirtualAccounts::create($params);
+    }
+
+    /**
+     * Payment channel list
+     *
+     * @return \Xendit\PaymentChannels::list
+     * @see https://developers.xendit.co/api-reference/#get-payment-channels
+     * @throws Exceptions\ApiException
+     */
+    public function getPaymentChannels()
+    {
+        try {
+            $this->getSecretKey();
+            return PaymentChannels::list();
+        } catch (Exception $e) {
             $e->getMessage();
         }
     }
@@ -72,6 +140,6 @@ class Xendit
      */
     public function getSecretKey()
     {
-        return $this->secretKey;
+        return $this->secretKey = BaseXendit::getApiKey();
     }
 }
