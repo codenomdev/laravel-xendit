@@ -15,7 +15,7 @@ class Xendit extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'Xendit';
+        return 'xendit';
     }
 
     /**
