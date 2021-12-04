@@ -10,6 +10,7 @@ use Xendit\Xendit as BaseXendit;
 use Xendit\Balance;
 use Xendit\VirtualAccounts;
 use Xendit\PaymentChannels;
+use Xendit\Invoice;
 
 class Xendit
 {
@@ -53,7 +54,7 @@ class Xendit
             $this->getSecretKey();
             return Balance::getBalance($account_type, $param);
         } catch (ApiException $e) {
-            $e->getMessage();
+            echo $e->getMessage();
         }
     }
 
@@ -69,7 +70,7 @@ class Xendit
             $this->getSecretKey();
             return VirtualAccounts::getVABanks();
         } catch (ApiException $e) {
-            $e->getMessage();
+            echo $e->getMessage();
         }
     }
 
@@ -115,7 +116,78 @@ class Xendit
             $this->getSecretKey();
             return PaymentChannels::list();
         } catch (Exception $e) {
-            $e->getMessage();
+            echo $e->getMessage();
+        }
+    }
+
+    /**
+     * Create new invoice.
+     * 
+     * @param array $param
+     * @return JSON
+     * @throws \Xendit\Exceptions\ApiException
+     */
+    public function createInvoice(array $param)
+    {
+        try {
+            $this->getSecretKey();
+            $invoice = Invoice::create($param);
+            return $invoice;
+        } catch (ApiException $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    /**
+     * Retrieve spesified w/ ID invoice.
+     * 
+     * @param string $id
+     * @return JSON
+     * @throws \Xendit\Exceptions\ApiException
+     */
+    public function retrieveInvoice(string $id)
+    {
+        try {
+            $this->getSecretKey();
+            $invoice = Invoice::retrieve($id);
+            return $invoice;
+        } catch (ApiException $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    /**
+     * Get all retrieve invoice.
+     * 
+     * @return JSON
+     * @throws \Xendit\Exceptions\ApiException
+     */
+    public function retrieveInvoices()
+    {
+        try {
+            $this->getSecretKey();
+            $invoice = Invoice::retrieveAll();
+            return $invoice;
+        } catch (ApiException $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    /**
+     * Expire invoice.
+     * 
+     * @param string $id
+     * @return JSON
+     * @throws \Xendit\Exceptions\ApiException
+     */
+    public function expireInvoice(string $id)
+    {
+        try {
+            $this->getSecretKey();
+            $invoice = Invoice::expireInvoice($id);
+            return $invoice;
+        } catch (ApiException $e) {
+            echo $e->getMessage();
         }
     }
 
